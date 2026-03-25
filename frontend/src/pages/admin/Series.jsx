@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
@@ -5,7 +6,7 @@ import { Layers, Plus, Pencil, Trash2, X, CheckCircle, XCircle, CreditCard, Box,
 
 const Series = () => {
     const { user } = useAuth();
-    const apiBaseUrl = (import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`);
+    
 
     // Estado principal
     const [activeTab, setActiveTab] = useState('series'); // 'series' | 'cajas'
@@ -50,7 +51,7 @@ const Series = () => {
     // Fetch data
     const fetchCajas = async () => {
         try {
-            const res = await axios.get(`${apiBaseUrl}/api/cajas`);
+            const res = await axios.get(`${API_BASE_URL}/api/cajas`);
             setCajas(res.data);
         } catch (error) {
             setStatus({ type: 'error', message: 'Error al cargar cajas' });
@@ -59,7 +60,7 @@ const Series = () => {
 
     const fetchSeries = async () => {
         try {
-            const res = await axios.get(`${apiBaseUrl}/api/series`);
+            const res = await axios.get(`${API_BASE_URL}/api/series`);
             setSeries(res.data);
         } catch (error) {
             setStatus({ type: 'error', message: 'Error al cargar series' });
@@ -68,7 +69,7 @@ const Series = () => {
 
     const fetchProveedores = async () => {
         try {
-            const res = await axios.get(`${apiBaseUrl}/api/proveedores`);
+            const res = await axios.get(`${API_BASE_URL}/api/proveedores`);
             setProveedores(res.data);
         } catch (error) {
             setStatus({ type: 'error', message: 'Error al cargar proveedores' });
@@ -99,7 +100,7 @@ const Series = () => {
     const handleDeleteCaja = async (id) => {
         if (!window.confirm('¿Desea eliminar esta caja definitivamente?')) return;
         try {
-            await axios.delete(`${apiBaseUrl}/api/cajas/${id}`);
+            await axios.delete(`${API_BASE_URL}/api/cajas/${id}`);
             fetchCajas();
             setStatus({ type: 'success', message: 'Caja eliminada' });
             // Refrescar series por si acaso la caja estaba asignada
@@ -111,7 +112,7 @@ const Series = () => {
 
     const handleToggleCajaEstado = async (caja) => {
         try {
-            const res = await axios.put(`${apiBaseUrl}/api/cajas/${caja._id}`, { condicion: !caja.condicion });
+            const res = await axios.put(`${API_BASE_URL}/api/cajas/${caja._id}`, { condicion: !caja.condicion });
             setCajas(prev => prev.map(c => c._id === caja._id ? res.data : c));
         } catch (error) {
             setStatus({ type: 'error', message: 'Error al cambiar estado de la caja' });
@@ -124,10 +125,10 @@ const Series = () => {
         const payload = { ...cajaForm, usuario_creacion: user?.id || user?._id };
         try {
             if (isEditing) {
-                await axios.put(`${apiBaseUrl}/api/cajas/${cajaForm._id}`, payload);
+                await axios.put(`${API_BASE_URL}/api/cajas/${cajaForm._id}`, payload);
                 setStatus({ type: 'success', message: 'Caja actualizada' });
             } else {
-                await axios.post(`${apiBaseUrl}/api/cajas`, payload);
+                await axios.post(`${API_BASE_URL}/api/cajas`, payload);
                 setStatus({ type: 'success', message: 'Caja creada' });
             }
             setIsCajaModalOpen(false);
@@ -161,7 +162,7 @@ const Series = () => {
 
         // Verificar si la serie está en uso
         try {
-            const res = await axios.get(`${apiBaseUrl}/api/series/uso/${serie._id}`);
+            const res = await axios.get(`${API_BASE_URL}/api/series/uso/${serie._id}`);
             setIsEnUso(res.data.enUso);
         } catch (error) {
             console.error("Error verificando uso de serie:", error);
@@ -171,7 +172,7 @@ const Series = () => {
     const handleDeleteSerie = async (id) => {
         if (!window.confirm('¿Desea eliminar esta serie definitivamente?')) return;
         try {
-            await axios.delete(`${apiBaseUrl}/api/series/${id}`);
+            await axios.delete(`${API_BASE_URL}/api/series/${id}`);
             fetchSeries();
             setStatus({ type: 'success', message: 'Serie eliminada' });
         } catch (error) {
@@ -181,7 +182,7 @@ const Series = () => {
 
     const handleToggleSerieEstado = async (serie) => {
         try {
-            const res = await axios.put(`${apiBaseUrl}/api/series/${serie._id}`, { condicion: !serie.condicion });
+            const res = await axios.put(`${API_BASE_URL}/api/series/${serie._id}`, { condicion: !serie.condicion });
             setSeries(prev => prev.map(s => s._id === serie._id ? res.data : s));
         } catch (error) {
             setStatus({ type: 'error', message: 'Error al cambiar estado de la serie' });
@@ -213,10 +214,10 @@ const Series = () => {
             }
 
             if (isEditing) {
-                await axios.put(`${apiBaseUrl}/api/series/${serieForm._id}`, payload);
+                await axios.put(`${API_BASE_URL}/api/series/${serieForm._id}`, payload);
                 setStatus({ type: 'success', message: 'Serie actualizada' });
             } else {
-                await axios.post(`${apiBaseUrl}/api/series`, payload);
+                await axios.post(`${API_BASE_URL}/api/series`, payload);
                 setStatus({ type: 'success', message: 'Serie creada' });
             }
             setIsSerieModalOpen(false);

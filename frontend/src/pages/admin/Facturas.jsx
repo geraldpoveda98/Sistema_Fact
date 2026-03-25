@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config';
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import {
@@ -10,7 +11,7 @@ import { useAuth } from '../../context/AuthContext';
 import { formatCurrency } from '../../utils/formatUtils';
 
 const Facturas = () => {
-    const apiBaseUrl = (import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`);
+    
     const { user, empresa } = useAuth();
     const normalize = (str) => str?.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim() || "";
     const tienePermiso = (p) => user?.permisos?.some(perm => normalize(perm).includes(normalize(p)));
@@ -70,8 +71,8 @@ const Facturas = () => {
     const cargarFacturasYProformas = async () => {
         try {
             const [resFacturas, resProformas] = await Promise.all([
-                axios.get(`${apiBaseUrl}/api/ventas/facturas`),
-                axios.get(`${apiBaseUrl}/api/proformas`)
+                axios.get(`${API_BASE_URL}/api/ventas/facturas`),
+                axios.get(`${API_BASE_URL}/api/proformas`)
             ]);
             setFacturas(resFacturas.data);
             setProformasEmitidas(resProformas.data.filter(p => p.estado === 'Emitida'));
@@ -84,12 +85,12 @@ const Facturas = () => {
         try {
             setLoadingData(true);
             const [resCajas, resSeries, resClientes, resImpuestos, resArticulos, resFormatos] = await Promise.all([
-                axios.get(`${apiBaseUrl}/api/cajas`),
-                axios.get(`${apiBaseUrl}/api/series`),
-                axios.get(`${apiBaseUrl}/api/clientes`),
-                axios.get(`${apiBaseUrl}/api/impuestos`),
-                axios.get(`${apiBaseUrl}/api/articulos`),
-                axios.get(`${apiBaseUrl}/api/formatos-impresion`)
+                axios.get(`${API_BASE_URL}/api/cajas`),
+                axios.get(`${API_BASE_URL}/api/series`),
+                axios.get(`${API_BASE_URL}/api/clientes`),
+                axios.get(`${API_BASE_URL}/api/impuestos`),
+                axios.get(`${API_BASE_URL}/api/articulos`),
+                axios.get(`${API_BASE_URL}/api/formatos-impresion`)
             ]);
 
             setCajas(resCajas.data.filter(c => c.condicion));
@@ -130,7 +131,7 @@ const Facturas = () => {
         handleFormDataChange('serieId', serieObj._id);
         handleFormDataChange('serieLiteral', serieObj.serie);
         try {
-            const res = await axios.get(`${apiBaseUrl}/api/ventas/factura/siguiente_correlativo/${serieObj._id}`);
+            const res = await axios.get(`${API_BASE_URL}/api/ventas/factura/siguiente_correlativo/${serieObj._id}`);
             handleFormDataChange('numero', res.data.siguiente_numero);
         } catch (err) {
             console.error(err);
@@ -324,7 +325,7 @@ const Facturas = () => {
         };
 
         try {
-            const res = await axios.post(`${apiBaseUrl}/api/ventas/factura`, payload);
+            const res = await axios.post(`${API_BASE_URL}/api/ventas/factura`, payload);
             showToast("Factura guardada exitosamente y stock actualizado. Generando PDF...");
 
             // Reconstruir objeto para PDF
@@ -358,7 +359,7 @@ const Facturas = () => {
     const handleAnularFactura = async (id) => {
         if (window.confirm("¿Seguro que desea anular esta FACTURA? Esto devolverá el stock de todos los artículos al inventario.")) {
             try {
-                await axios.patch(`${apiBaseUrl}/api/ventas/factura/${id}/anular`);
+                await axios.patch(`${API_BASE_URL}/api/ventas/factura/${id}/anular`);
                 showToast("Factura Anulada Correctamente. Stock devuelto.", "success");
                 cargarFacturasYProformas();
             } catch (error) {
@@ -422,7 +423,7 @@ const Facturas = () => {
             if (empLogoUrl) {
                 try {
                     console.log("Cargando logo Factura:", empLogoUrl);
-                    const logoFullUrl = empLogoUrl.startsWith('http') ? empLogoUrl : `${apiBaseUrl}/${empLogoUrl}`;
+                    const logoFullUrl = empLogoUrl.startsWith('http') ? empLogoUrl : `${API_BASE_URL}/${empLogoUrl}`;
                     const response = await fetch(logoFullUrl);
                     if (response.ok) {
                         const blob = await response.blob();
@@ -692,7 +693,7 @@ const Facturas = () => {
             // === LOGO (Si existe) ===
             if (empresa?.logoUrl) {
                 try {
-                    const logoFullUrl = empresa.logoUrl.startsWith('http') ? empresa.logoUrl : `${apiBaseUrl}/${empresa.logoUrl}`;
+                    const logoFullUrl = empresa.logoUrl.startsWith('http') ? empresa.logoUrl : `${API_BASE_URL}/${empresa.logoUrl}`;
                     const response = await fetch(logoFullUrl);
                     if (response.ok) {
                         const blob = await response.blob();
@@ -1342,7 +1343,7 @@ const Facturas = () => {
                                             <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden border dark:border-slate-700">
                                                 {a.imagen ? (
                                                     <img 
-                                                        src={a.imagen.startsWith('http') ? a.imagen : `${apiBaseUrl}/${a.imagen}`} 
+                                                        src={a.imagen.startsWith('http') ? a.imagen : `${API_BASE_URL}/${a.imagen}`} 
                                                         alt={a.nombre} 
                                                         className="w-full h-full object-cover"
                                                     />

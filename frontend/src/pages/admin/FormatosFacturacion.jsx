@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
@@ -6,7 +7,7 @@ import {
 } from 'lucide-react';
 
 const FormatosFacturacion = () => {
-    const apiBaseUrl = (import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`);
+    
 
     // ======== ESTADOS ========
     const [formatos, setFormatos] = useState([]);
@@ -37,7 +38,7 @@ const FormatosFacturacion = () => {
     const cargarFormatos = async () => {
         try {
             setLoading(true);
-            const res = await axios.get(`${apiBaseUrl}/api/formatos-impresion`);
+            const res = await axios.get(`${API_BASE_URL}/api/formatos-impresion`);
             setFormatos(res.data);
         } catch (error) {
             console.error("Error cargando formatos", error);
@@ -83,10 +84,10 @@ const FormatosFacturacion = () => {
         e.preventDefault();
         try {
             if (editId) {
-                await axios.put(`${apiBaseUrl}/api/formatos-impresion/${editId}`, formData);
+                await axios.put(`${API_BASE_URL}/api/formatos-impresion/${editId}`, formData);
                 showToast("Formato actualizado con éxito");
             } else {
-                await axios.post(`${apiBaseUrl}/api/formatos-impresion`, formData);
+                await axios.post(`${API_BASE_URL}/api/formatos-impresion`, formData);
                 showToast("Formato creado con éxito");
             }
             cargarFormatos();
@@ -99,7 +100,7 @@ const FormatosFacturacion = () => {
 
     const handleToggleEstado = async (id) => {
         try {
-            await axios.patch(`${apiBaseUrl}/api/formatos-impresion/${id}/estado`);
+            await axios.patch(`${API_BASE_URL}/api/formatos-impresion/${id}/estado`);
             cargarFormatos();
         } catch (error) {
             showToast("Error al cambiar estado", "error");
@@ -109,7 +110,7 @@ const FormatosFacturacion = () => {
     const handleEliminar = async (id) => {
         if (window.confirm("¿Seguro que deseas eliminar este formato? Si está en uso podrías causar errores.")) {
             try {
-                await axios.delete(`${apiBaseUrl}/api/formatos-impresion/${id}`);
+                await axios.delete(`${API_BASE_URL}/api/formatos-impresion/${id}`);
                 showToast("Formato eliminado");
                 cargarFormatos();
             } catch (error) {

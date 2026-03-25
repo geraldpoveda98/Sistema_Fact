@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
@@ -7,7 +8,7 @@ import { useAuth } from '../../context/AuthContext';
 import { exportToExcel, exportToPDF } from '../../utils/exportUtils';
 
 const Clientes = () => {
-    const apiBaseUrl = (import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`);
+    
     const { user } = useAuth();
 
     const [clientes, setClientes] = useState([]);
@@ -57,7 +58,7 @@ const Clientes = () => {
     const fetchClientes = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`${apiBaseUrl}/api/clientes`);
+            const response = await axios.get(`${API_BASE_URL}/api/clientes`);
             setClientes(response.data);
         } catch (error) {
             console.error("Error cargando clientes:", error);
@@ -74,10 +75,10 @@ const Clientes = () => {
             delete payload.id;
 
             if (isEditing) {
-                await axios.put(`${apiBaseUrl}/api/clientes/${formData.id}`, payload);
+                await axios.put(`${API_BASE_URL}/api/clientes/${formData.id}`, payload);
                 showToast("Cliente actualizado correctamente");
             } else {
-                await axios.post(`${apiBaseUrl}/api/clientes`, payload);
+                await axios.post(`${API_BASE_URL}/api/clientes`, payload);
                 showToast("Cliente creado exitosamente");
             }
             closeModal();
@@ -89,7 +90,7 @@ const Clientes = () => {
 
     const handleToggleStatus = async (id, currentStatus) => {
         try {
-            await axios.patch(`${apiBaseUrl}/api/clientes/${id}/estado`);
+            await axios.patch(`${API_BASE_URL}/api/clientes/${id}/estado`);
             showToast(`Cliente ${currentStatus ? 'deshabilitado' : 'habilitado'}`);
             fetchClientes();
             setActiveDropdown(null);
@@ -101,7 +102,7 @@ const Clientes = () => {
     const handleDelete = async (id) => {
         if (window.confirm("¿Seguro que desea ELIMINAR permanentemente este cliente?")) {
             try {
-                await axios.delete(`${apiBaseUrl}/api/clientes/${id}`);
+                await axios.delete(`${API_BASE_URL}/api/clientes/${id}`);
                 showToast("Cliente eliminado de la base de datos");
                 fetchClientes();
                 setActiveDropdown(null);

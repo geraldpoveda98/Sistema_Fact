@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
@@ -6,7 +7,7 @@ import {
 import { useAuth } from '../../context/AuthContext';
 
 const Modelos = () => {
-    const apiBaseUrl = (import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`);
+    
     const { user } = useAuth();
 
     // Estados principales
@@ -50,7 +51,7 @@ const Modelos = () => {
     const fetchModelos = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`${apiBaseUrl}/api/modelos?t=${Date.now()}`);
+            const response = await axios.get(`${API_BASE_URL}/api/modelos?t=${Date.now()}`);
             setModelos(response.data);
         } catch (error) {
             console.error("Error cargando modelos:", error);
@@ -66,14 +67,14 @@ const Modelos = () => {
         try {
             if (isEditing) {
                 // PUT: Actualizar
-                await axios.put(`${apiBaseUrl}/api/modelos/${formData.id}`, {
+                await axios.put(`${API_BASE_URL}/api/modelos/${formData.id}`, {
                     nombre: formData.nombre,
                     descripcion: formData.descripcion
                 });
                 showToast("Modelo actualizado correctamente");
             } else {
                 // POST: Crear
-                await axios.post(`${apiBaseUrl}/api/modelos`, {
+                await axios.post(`${API_BASE_URL}/api/modelos`, {
                     nombre: formData.nombre,
                     descripcion: formData.descripcion
                 });
@@ -104,7 +105,7 @@ const Modelos = () => {
     // ACTION: Cambiar Estado
     const handleToggleStatus = async (id, currentStatus) => {
         try {
-            const response = await axios.patch(`${apiBaseUrl}/api/modelos/${id}/estado?t=${Date.now()}`);
+            const response = await axios.patch(`${API_BASE_URL}/api/modelos/${id}/estado?t=${Date.now()}`);
             const updatedModel = response.data.modelo;
 
             console.log(`[ToggleDebug] ID: ${id} | Nuevo Estado: ${updatedModel.condicion}`);
@@ -131,7 +132,7 @@ const Modelos = () => {
     const handleDelete = async (id) => {
         if (window.confirm("¿Seguro que desea ELIMINAR permanentemente este modelo?")) {
             try {
-                await axios.delete(`${apiBaseUrl}/api/modelos/${id}`);
+                await axios.delete(`${API_BASE_URL}/api/modelos/${id}`);
                 showToast("Modelo eliminado del sistema");
                 fetchModelos();
                 setActiveDropdown(null);

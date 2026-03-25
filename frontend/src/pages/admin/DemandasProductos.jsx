@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
@@ -15,7 +16,7 @@ import 'jspdf-autotable';
 const COLORS = ['#0ea5e9', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#64748b'];
 
 const DemandasProductos = () => {
-    const apiBaseUrl = (import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`);
+    
 
     // State
     const [demandas, setDemandas] = useState([]);
@@ -28,7 +29,7 @@ const DemandasProductos = () => {
         try {
             setLoading(true);
             // Reutilizamos el endpoint de artículos para extraer la información base de productos
-            const res = await axios.get(`${apiBaseUrl}/api/articulos`);
+            const res = await axios.get(`${API_BASE_URL}/api/articulos`);
             const dataBase = res.data;
 
             // Mapeamos para crear una estructura con demanda (mock o real si existe un endpoint específico luego)

@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
@@ -9,7 +10,7 @@ import { formatCurrency } from '../../utils/formatUtils';
 
 const ComprasIngresos = () => {
     const { user } = useAuth();
-    const apiBaseUrl = (import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`);
+    
 
     // ===== ESTADOS: MODALES =====
     const [isNuevoModalOpen, setIsNuevoModalOpen] = useState(false);
@@ -70,10 +71,10 @@ const ComprasIngresos = () => {
     const fetchInitialData = async () => {
         try {
             const [provRes, seriesRes, impRes, artRes] = await Promise.all([
-                axios.get(`${apiBaseUrl}/api/proveedores`),
-                axios.get(`${apiBaseUrl}/api/series`),
-                axios.get(`${apiBaseUrl}/api/impuestos`),
-                axios.get(`${apiBaseUrl}/api/articulos`)
+                axios.get(`${API_BASE_URL}/api/proveedores`),
+                axios.get(`${API_BASE_URL}/api/series`),
+                axios.get(`${API_BASE_URL}/api/impuestos`),
+                axios.get(`${API_BASE_URL}/api/articulos`)
             ]);
 
             setProveedores(provRes.data.filter(p => p.estado));
@@ -131,7 +132,7 @@ const ComprasIngresos = () => {
             return;
         }
 
-        const fullUrl = `${apiBaseUrl}/api/compras/siguiente_correlativo/${serieObj._id}`;
+        const fullUrl = `${API_BASE_URL}/api/compras/siguiente_correlativo/${serieObj._id}`;
         console.log("Fetching correlativo from:", fullUrl);
         try {
             const res = await axios.get(fullUrl);
@@ -177,7 +178,7 @@ const ComprasIngresos = () => {
 
         try {
             setLoading(true);
-            await axios.post(`${apiBaseUrl}/api/compras`, payload);
+            await axios.post(`${API_BASE_URL}/api/compras`, payload);
             showToast("¡Ingreso registrado exitosamente!");
             setDetalles([]);
             setIngreso({ ...ingreso, numero: '' });
@@ -195,7 +196,7 @@ const ComprasIngresos = () => {
     const fetchHistorial = async () => {
         try {
             setLoadingHistorial(true);
-            const res = await axios.get(`${apiBaseUrl}/api/compras/consultar`, {
+            const res = await axios.get(`${API_BASE_URL}/api/compras/consultar`, {
                 params: {
                     estado: 'Ingresos', // Traer todo lo que sea Ingreso normal
                     mes: filtroMes,

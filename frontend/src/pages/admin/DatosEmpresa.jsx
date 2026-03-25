@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BuildingOfficeIcon, PhotoIcon, ServerIcon } from '@heroicons/react/24/outline';
@@ -14,13 +15,13 @@ const DatosEmpresa = () => {
     const [status, setStatus] = useState({ type: '', message: '' });
     const [loading, setLoading] = useState(false);
 
-    const apiBaseUrl = (import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`);
+    
 
     // Cargar datos actuales
     useEffect(() => {
         const fetchDatos = async () => {
             try {
-                const res = await axios.get(`${apiBaseUrl}/api/empresa`);
+                const res = await axios.get(`${API_BASE_URL}/api/empresa`);
                 if (res.data) {
                     setFormData({
                         nombre: res.data.nombre || '',
@@ -34,7 +35,7 @@ const DatosEmpresa = () => {
                         valorDolar: res.data.valorDolar || 36.5
                     });
                     if (res.data.logoUrl) {
-                        setCurrentLogo(`${apiBaseUrl}${res.data.logoUrl}`);
+                        setCurrentLogo(`${API_BASE_URL}${res.data.logoUrl}`);
                     }
                 }
             } catch (error) {
@@ -103,12 +104,12 @@ const DatosEmpresa = () => {
         }
 
         try {
-            const res = await axios.post(`${apiBaseUrl}/api/empresa`, dataToSend, {
+            const res = await axios.post(`${API_BASE_URL}/api/empresa`, dataToSend, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
             setStatus({ type: 'success', message: '¡Datos Guardados Exitosamente!' });
             if (res.data.empresa.logoUrl) {
-                setCurrentLogo(`${apiBaseUrl}${res.data.empresa.logoUrl}`);
+                setCurrentLogo(`${API_BASE_URL}${res.data.empresa.logoUrl}`);
                 setLogoPreview(null); // Limpiar preview local al guardar
                 setLogoFile(null);
             }

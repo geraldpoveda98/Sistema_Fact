@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../config';
 import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -39,10 +40,10 @@ export const AuthProvider = ({ children }) => {
         // Cargar datos globales de la empresa para toda la App (Logo, Nombres)
         const fetchEmpresa = async () => {
             try {
-                const apiBaseUrl = (import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`);
-                const res = await axios.get(`${apiBaseUrl}/api/empresa`);
+                
+                const res = await axios.get(`${API_BASE_URL}/api/empresa`);
                 if (res.data) {
-                    const logoFullUrl = res.data.logoUrl ? `${apiBaseUrl}${res.data.logoUrl}` : null;
+                    const logoFullUrl = res.data.logoUrl ? `${API_BASE_URL}${res.data.logoUrl}` : null;
                     setEmpresa({
                         ...res.data,
                         logoUrl: logoFullUrl
@@ -74,7 +75,7 @@ export const AuthProvider = ({ children }) => {
     const login = async (loginId, clave) => {
         try {
             // Utilizamos window.location.hostname para detectar la IP dinámica si se accede desde el móvil
-            const endpoint = `http://${window.location.hostname}:5000/api/usuarios/login`;
+            const endpoint = `${API_BASE_URL}/api/usuarios/login`;
             const res = await axios.post(endpoint, { login: loginId, clave });
 
             setToken(res.data.token);

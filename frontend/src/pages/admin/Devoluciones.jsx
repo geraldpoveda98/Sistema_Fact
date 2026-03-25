@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
@@ -9,7 +10,7 @@ import { useAuth } from '../../context/AuthContext';
 import { formatCurrency } from '../../utils/formatUtils';
 
 const Devoluciones = () => {
-    const apiBaseUrl = (import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`);
+    
     const { user, empresa } = useAuth();
     const normalize = (str) => str?.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim() || "";
     const tienePermiso = (p) => user?.permisos?.some(perm => normalize(perm).includes(normalize(p)));
@@ -63,7 +64,7 @@ const Devoluciones = () => {
 
     const cargarHistorial = async () => {
         try {
-            const res = await axios.get(`${apiBaseUrl}/api/devoluciones`);
+            const res = await axios.get(`${API_BASE_URL}/api/devoluciones`);
             setDevoluciones(res.data);
         } catch (error) {
             console.error("Error obteniendo historial de devoluciones", error);
@@ -74,12 +75,12 @@ const Devoluciones = () => {
         try {
             setLoadingData(true);
             const [resCajas, resSeries, resFacturas, resDevoluciones, resFormatos, resArticulos] = await Promise.all([
-                axios.get(`${apiBaseUrl}/api/cajas`),
-                axios.get(`${apiBaseUrl}/api/series`),
-                axios.get(`${apiBaseUrl}/api/ventas/facturas`),
-                axios.get(`${apiBaseUrl}/api/devoluciones`),
-                axios.get(`${apiBaseUrl}/api/formatos-impresion`),
-                axios.get(`${apiBaseUrl}/api/articulos`)
+                axios.get(`${API_BASE_URL}/api/cajas`),
+                axios.get(`${API_BASE_URL}/api/series`),
+                axios.get(`${API_BASE_URL}/api/ventas/facturas`),
+                axios.get(`${API_BASE_URL}/api/devoluciones`),
+                axios.get(`${API_BASE_URL}/api/formatos-impresion`),
+                axios.get(`${API_BASE_URL}/api/articulos`)
             ]);
 
             setCajas(resCajas.data.filter(c => c.condicion));
@@ -118,7 +119,7 @@ const Devoluciones = () => {
         handleFormDataChange('serieId', serieObj._id);
         handleFormDataChange('serieLiteral', serieObj.serie);
         try {
-            const res = await axios.get(`${apiBaseUrl}/api/devoluciones/siguiente_correlativo/${serieObj._id}`);
+            const res = await axios.get(`${API_BASE_URL}/api/devoluciones/siguiente_correlativo/${serieObj._id}`);
             handleFormDataChange('numero', res.data.siguiente_numero);
         } catch (err) {
             console.error(err);
@@ -171,7 +172,7 @@ const Devoluciones = () => {
         };
 
         try {
-            const res = await axios.post(`${apiBaseUrl}/api/devoluciones`, payload);
+            const res = await axios.post(`${API_BASE_URL}/api/devoluciones`, payload);
             
             showToast("Devolución procesada y factura anulada con éxito.", "success");
 
@@ -256,7 +257,7 @@ const Devoluciones = () => {
 
             if (empLogoUrl) {
                 try {
-                    const logoFullUrl = empLogoUrl.startsWith('http') ? empLogoUrl : `${apiBaseUrl}/${empLogoUrl}`;
+                    const logoFullUrl = empLogoUrl.startsWith('http') ? empLogoUrl : `${API_BASE_URL}/${empLogoUrl}`;
                     const response = await fetch(logoFullUrl);
                     if (response.ok) {
                         const blob = await response.blob();
@@ -471,7 +472,7 @@ const Devoluciones = () => {
             // === LOGO (Si existe) ===
             if (empresa?.logoUrl) {
                 try {
-                    const logoFullUrl = empresa.logoUrl.startsWith('http') ? empresa.logoUrl : `${apiBaseUrl}/${empresa.logoUrl}`;
+                    const logoFullUrl = empresa.logoUrl.startsWith('http') ? empresa.logoUrl : `${API_BASE_URL}/${empresa.logoUrl}`;
                     const response = await fetch(logoFullUrl);
                     if (response.ok) {
                         const blob = await response.blob();

@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
@@ -6,7 +7,7 @@ import {
 import { useAuth } from '../../context/AuthContext';
 
 const Categorias = () => {
-    const apiBaseUrl = (import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`);
+    
     const { user } = useAuth();
 
     // Estados principales
@@ -50,7 +51,7 @@ const Categorias = () => {
     const fetchCategorias = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`${apiBaseUrl}/api/categorias`);
+            const response = await axios.get(`${API_BASE_URL}/api/categorias`);
             setCategorias(response.data);
         } catch (error) {
             console.error("Error cargando categorías:", error);
@@ -66,14 +67,14 @@ const Categorias = () => {
         try {
             if (isEditing) {
                 // PUT: Actualizar
-                await axios.put(`${apiBaseUrl}/api/categorias/${formData.id}`, {
+                await axios.put(`${API_BASE_URL}/api/categorias/${formData.id}`, {
                     nombre: formData.nombre,
                     descripcion: formData.descripcion
                 });
                 showToast("Categoría actualizada correctamente");
             } else {
                 // POST: Crear
-                await axios.post(`${apiBaseUrl}/api/categorias`, {
+                await axios.post(`${API_BASE_URL}/api/categorias`, {
                     nombre: formData.nombre,
                     descripcion: formData.descripcion
                 });
@@ -104,7 +105,7 @@ const Categorias = () => {
     // ACTION: Cambiar Estado
     const handleToggleStatus = async (id, currentStatus) => {
         try {
-            await axios.patch(`${apiBaseUrl}/api/categorias/${id}/estado`);
+            await axios.patch(`${API_BASE_URL}/api/categorias/${id}/estado`);
             showToast(`Categoría ${currentStatus ? 'deshabilitada' : 'habilitada'}`);
             fetchCategorias();
             setActiveDropdown(null);
@@ -117,7 +118,7 @@ const Categorias = () => {
     const handleDelete = async (id) => {
         if (window.confirm("¿Seguro que desea ELIMINAR permanentemente esta categoría? (Esto fallará si existen artículos usando esta categoría)")) {
             try {
-                await axios.delete(`${apiBaseUrl}/api/categorias/${id}`);
+                await axios.delete(`${API_BASE_URL}/api/categorias/${id}`);
                 showToast("Categoría eliminada del sistema");
                 fetchCategorias();
                 setActiveDropdown(null);

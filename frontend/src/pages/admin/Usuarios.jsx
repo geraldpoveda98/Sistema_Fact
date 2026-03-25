@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config';
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { Users, UserPlus, Pencil, Trash2, Camera, Upload, X, ShieldCheck } from 'lucide-react';
@@ -9,7 +10,7 @@ const ALL_PERMISSIONS = [
 ];
 
 const Usuarios = () => {
-    const apiBaseUrl = (import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`);
+    
 
     const [usuarios, setUsuarios] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,7 +46,7 @@ const Usuarios = () => {
 
     const fetchUsuarios = async () => {
         try {
-            const res = await axios.get(`${apiBaseUrl}/api/usuarios`);
+            const res = await axios.get(`${API_BASE_URL}/api/usuarios`);
             setUsuarios(res.data);
         } catch (error) {
             console.error('Error cargando usuarios:', error);
@@ -127,7 +128,7 @@ const Usuarios = () => {
             ...user,
             clave: '' // Don't show password, leave blank unless wanting to change
         });
-        setFotoPreview(user.fotoUrl ? `${apiBaseUrl}${user.fotoUrl}` : null);
+        setFotoPreview(user.fotoUrl ? `${API_BASE_URL}${user.fotoUrl}` : null);
         setFotoFile(null);
         setIsEditing(true);
         setIsModalOpen(true);
@@ -136,7 +137,7 @@ const Usuarios = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('¿Eliminar este usuario definitivamente?')) return;
         try {
-            await axios.delete(`${apiBaseUrl}/api/usuarios/${id}`);
+            await axios.delete(`${API_BASE_URL}/api/usuarios/${id}`);
             fetchUsuarios();
             setStatus({ type: 'success', message: 'Usuario eliminado' });
         } catch (error) {
@@ -174,10 +175,10 @@ const Usuarios = () => {
             if (isEditing) {
                 // Ignore empty password on edit
                 if (!formData.clave) dataToSend.delete('clave');
-                await axios.put(`${apiBaseUrl}/api/usuarios/${formData._id}`, dataToSend);
+                await axios.put(`${API_BASE_URL}/api/usuarios/${formData._id}`, dataToSend);
                 setStatus({ type: 'success', message: 'Usuario actualizado' });
             } else {
-                await axios.post(`${apiBaseUrl}/api/usuarios`, dataToSend);
+                await axios.post(`${API_BASE_URL}/api/usuarios`, dataToSend);
                 setStatus({ type: 'success', message: 'Usuario creado exitosamente' });
             }
             setIsModalOpen(false);
@@ -232,7 +233,7 @@ const Usuarios = () => {
                     <div key={user._id} className="bg-white dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 flex flex-col items-center text-center shadow-sm hover:shadow-md transition-all group">
                         <div className="w-24 h-24 rounded-full bg-slate-100 dark:bg-slate-800 border-4 border-white dark:border-slate-800 shadow-md flex items-center justify-center overflow-hidden mb-4 relative">
                             {user.fotoUrl ? (
-                                <img src={`${apiBaseUrl}${user.fotoUrl}`} alt={user.nombre} className="w-full h-full object-cover" />
+                                <img src={`${API_BASE_URL}${user.fotoUrl}`} alt={user.nombre} className="w-full h-full object-cover" />
                             ) : (
                                 <span className="text-3xl font-bold text-slate-400">{user.nombre.charAt(0).toUpperCase()}</span>
                             )}

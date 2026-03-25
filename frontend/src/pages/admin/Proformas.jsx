@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config';
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import {
@@ -10,7 +11,7 @@ import { useAuth } from '../../context/AuthContext';
 import { formatCurrency } from '../../utils/formatUtils';
 
 const Proformas = () => {
-    const apiBaseUrl = (import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`);
+    
     const { user, empresa } = useAuth();
     const normalize = (str) => str?.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim() || "";
     const tienePermiso = (p) => user?.permisos?.some(perm => normalize(perm).includes(normalize(p)));
@@ -65,7 +66,7 @@ const Proformas = () => {
 
     const cargarProformasHistorial = async () => {
         try {
-            const res = await axios.get(`${apiBaseUrl}/api/proformas`);
+            const res = await axios.get(`${API_BASE_URL}/api/proformas`);
             setProformas(res.data);
         } catch (error) {
             console.error("Error obteniendo historial de proformas", error);
@@ -76,13 +77,13 @@ const Proformas = () => {
         try {
             setLoadingData(true);
             const [resCajas, resSeries, resClientes, resImpuestos, resArticulos, resProformas, resFormatos] = await Promise.all([
-                axios.get(`${apiBaseUrl}/api/cajas`),
-                axios.get(`${apiBaseUrl}/api/series`),
-                axios.get(`${apiBaseUrl}/api/clientes`),
-                axios.get(`${apiBaseUrl}/api/impuestos`),
-                axios.get(`${apiBaseUrl}/api/articulos`),
-                axios.get(`${apiBaseUrl}/api/proformas`),
-                axios.get(`${apiBaseUrl}/api/formatos-impresion`)
+                axios.get(`${API_BASE_URL}/api/cajas`),
+                axios.get(`${API_BASE_URL}/api/series`),
+                axios.get(`${API_BASE_URL}/api/clientes`),
+                axios.get(`${API_BASE_URL}/api/impuestos`),
+                axios.get(`${API_BASE_URL}/api/articulos`),
+                axios.get(`${API_BASE_URL}/api/proformas`),
+                axios.get(`${API_BASE_URL}/api/formatos-impresion`)
             ]);
 
             setCajas(resCajas.data.filter(c => c.condicion));
@@ -121,7 +122,7 @@ const Proformas = () => {
         handleFormDataChange('serieId', serieObj._id);
         handleFormDataChange('serieLiteral', serieObj.serie);
         try {
-            const res = await axios.get(`${apiBaseUrl}/api/proformas/siguiente_correlativo/${serieObj._id}`);
+            const res = await axios.get(`${API_BASE_URL}/api/proformas/siguiente_correlativo/${serieObj._id}`);
             handleFormDataChange('numero', res.data.siguiente_numero);
         } catch (err) {
             console.error(err);
@@ -266,7 +267,7 @@ const Proformas = () => {
         };
 
         try {
-            const res = await axios.post(`${apiBaseUrl}/api/proformas`, payload);
+            const res = await axios.post(`${API_BASE_URL}/api/proformas`, payload);
             showToast("Proforma guardada exitosamente. Generando PDF...");
 
             // Render PDF pasándole toda la data enriquecida (necesitamos emular los populate de cliente)
@@ -302,7 +303,7 @@ const Proformas = () => {
     const handleAnularProforma = async (id) => {
         if (window.confirm("¿Seguro que desea anular esta proforma?")) {
             try {
-                await axios.patch(`${apiBaseUrl}/api/proformas/${id}/estado`, { estado: 'Anulada' });
+                await axios.patch(`${API_BASE_URL}/api/proformas/${id}/estado`, { estado: 'Anulada' });
                 showToast("Proforma Anulada", "success");
                 cargarProformasHistorial();
             } catch (error) {
@@ -373,7 +374,7 @@ const Proformas = () => {
             if (empLogoUrl) {
                 try {
                     console.log("Cargando logo desde:", empLogoUrl);
-                    const logoFullUrl = empLogoUrl.startsWith('http') ? empLogoUrl : `${apiBaseUrl}/${empLogoUrl}`;
+                    const logoFullUrl = empLogoUrl.startsWith('http') ? empLogoUrl : `${API_BASE_URL}/${empLogoUrl}`;
                     const response = await fetch(logoFullUrl);
                     if (response.ok) {
                         const blob = await response.blob();
@@ -640,7 +641,7 @@ const Proformas = () => {
             // === LOGO (Si existe) ===
             if (empresa?.logoUrl) {
                 try {
-                    const logoFullUrl = empresa.logoUrl.startsWith('http') ? empresa.logoUrl : `${apiBaseUrl}/${empresa.logoUrl}`;
+                    const logoFullUrl = empresa.logoUrl.startsWith('http') ? empresa.logoUrl : `${API_BASE_URL}/${empresa.logoUrl}`;
                     const response = await fetch(logoFullUrl);
                     if (response.ok) {
                         const blob = await response.blob();
@@ -1212,7 +1213,7 @@ const Proformas = () => {
                                         <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden border dark:border-slate-700">
                                             {a.imagen ? (
                                                 <img 
-                                                    src={a.imagen.startsWith('http') ? a.imagen : `${apiBaseUrl}/${a.imagen}`} 
+                                                    src={a.imagen.startsWith('http') ? a.imagen : `${API_BASE_URL}/${a.imagen}`} 
                                                     alt={a.nombre} 
                                                     className="w-full h-full object-cover"
                                                 />

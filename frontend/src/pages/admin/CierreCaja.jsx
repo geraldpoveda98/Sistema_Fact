@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
@@ -9,7 +10,7 @@ import { exportToExcel, exportToPDF } from '../../utils/exportUtils';
 import { formatCurrency } from '../../utils/formatUtils';
 
 const CierreCaja = () => {
-    const apiBaseUrl = (import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`);
+    
     const { user } = useAuth();
 
     const [loading, setLoading] = useState(false);
@@ -41,7 +42,7 @@ const CierreCaja = () => {
     const fetchCierre = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`${apiBaseUrl}/api/ventas/cierre-caja`, {
+            const response = await axios.get(`${API_BASE_URL}/api/ventas/cierre-caja`, {
                 params: { fechaInicio, fechaFin, caja: cajaSeleccionada, tipoDocumento }
             });
             setTotales(response.data.totales);
@@ -78,7 +79,7 @@ const CierreCaja = () => {
 
         if (window.confirm(`¿Seguro que desea pasar ${seleccionados.length} documentos a Histórico?`)) {
             try {
-                await axios.post(`${apiBaseUrl}/api/ventas/pasar-historial`, { ventasIds: seleccionados });
+                await axios.post(`${API_BASE_URL}/api/ventas/pasar-historial`, { ventasIds: seleccionados });
                 showToast("Documentos archivados exitosamente");
                 fetchCierre(); // Recargar tablas
             } catch (error) {
@@ -173,7 +174,7 @@ const CierreCaja = () => {
 
                 {/* Botón Flotante para Generar Mock (Solo Pruebas) TODO: Quitar en Producción */}
                 <button
-                    onClick={async () => { await axios.post(`${apiBaseUrl}/api/ventas/mock`); fetchCierre(); showToast("Venta de prueba generada", "success"); }}
+                    onClick={async () => { await axios.post(`${API_BASE_URL}/api/ventas/mock`); fetchCierre(); showToast("Venta de prueba generada", "success"); }}
                     className="px-4 py-2 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-bold"
                 >
                     + Venta de Prueba

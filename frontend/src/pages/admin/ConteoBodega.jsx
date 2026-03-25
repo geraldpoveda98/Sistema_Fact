@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
@@ -7,7 +8,7 @@ import {
 import { exportToExcel, exportToPDF } from '../../utils/exportUtils';
 
 const ConteoBodega = () => {
-    const apiBaseUrl = (import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`);
+    
     const { user } = useAuth();
 
     // ===== Estados: TABS =====
@@ -63,7 +64,7 @@ const ConteoBodega = () => {
     // ----- LOGICA: NUEVO CONTEO -----
     const fetchComprasParaConteo = async () => {
         try {
-            const res = await axios.get(`${apiBaseUrl}/api/compras/para-conteo`);
+            const res = await axios.get(`${API_BASE_URL}/api/compras/para-conteo`);
             setCompras(res.data);
         } catch (error) {
             showToast("Error al cargar comprobantes listos para conteo", "error");
@@ -115,7 +116,7 @@ const ConteoBodega = () => {
 
         try {
             setSaving(true);
-            await axios.post(`${apiBaseUrl}/api/conteos`, payload);
+            await axios.post(`${API_BASE_URL}/api/conteos`, payload);
             showToast("Auditoría guardada exitosamente");
             setCompraSeleccionada('');
             setDetallesConteo([]);
@@ -132,7 +133,7 @@ const ConteoBodega = () => {
     const fetchHistorial = async () => {
         try {
             setLoadingHistorial(true);
-            const res = await axios.get(`${apiBaseUrl}/api/conteos`, {
+            const res = await axios.get(`${API_BASE_URL}/api/conteos`, {
                 params: { mes: filtroMes, anio: filtroAnio }
             });
             setHistorialConteos(res.data);
@@ -155,7 +156,7 @@ const ConteoBodega = () => {
     const handleDeleteConteo = async (id) => {
         if (window.confirm("¿Seguro que desea eliminar esta auditoría de conteo?")) {
             try {
-                await axios.delete(`${apiBaseUrl}/api/conteos/${id}`);
+                await axios.delete(`${API_BASE_URL}/api/conteos/${id}`);
                 showToast("Conteo eliminado con éxito");
                 fetchHistorial();
                 setActiveDropdown(null);

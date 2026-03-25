@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { AlertTriangle, Database, Trash2, ShieldAlert } from 'lucide-react';
@@ -10,12 +11,12 @@ const EliminarBD = () => {
     const [palabraClave, setPalabraClave] = useState('');
     const [eliminando, setEliminando] = useState(false);
 
-    const apiBaseUrl = (import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`);
+    
 
     const cargarConteos = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`${apiBaseUrl}/api/limpiar-datos/conteo`);
+            const response = await axios.get(`${API_BASE_URL}/api/limpiar-datos/conteo`);
             setColecciones(response.data);
         } catch (error) {
             console.error("Error cargando BD", error);
@@ -42,7 +43,7 @@ const EliminarBD = () => {
 
         try {
             setEliminando(true);
-            await axios.delete(`${apiBaseUrl}/api/limpiar-datos/${coleccionSeleccionada.modelo}`);
+            await axios.delete(`${API_BASE_URL}/api/limpiar-datos/${coleccionSeleccionada.modelo}`);
             setShowModal(false);
             await cargarConteos(); // refrescar
             alert(`¡Base de datos ${coleccionSeleccionada.coleccion} vaciada con éxito!`);

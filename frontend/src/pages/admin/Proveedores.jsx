@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
@@ -8,7 +9,7 @@ import {
 
 const Proveedores = () => {
     const { user } = useAuth();
-    const apiBaseUrl = (import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`);
+    
 
     const [proveedores, setProveedores] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -49,7 +50,7 @@ const Proveedores = () => {
     // Fetch data
     const fetchProveedores = async (search = '') => {
         try {
-            const res = await axios.get(`${apiBaseUrl}/api/proveedores?search=${search}`);
+            const res = await axios.get(`${API_BASE_URL}/api/proveedores?search=${search}`);
             setProveedores(res.data);
         } catch (error) {
             setStatus({ type: 'error', message: 'Error al cargar proveedores' });
@@ -90,7 +91,7 @@ const Proveedores = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('¿Desea eliminar este proveedor definitivamente?')) return;
         try {
-            await axios.delete(`${apiBaseUrl}/api/proveedores/${id}`);
+            await axios.delete(`${API_BASE_URL}/api/proveedores/${id}`);
             fetchProveedores(searchTerm);
             setIsDetailOpen(false);
             setStatus({ type: 'success', message: 'Proveedor eliminado' });
@@ -101,7 +102,7 @@ const Proveedores = () => {
 
     const handleToggleEstado = async (prov) => {
         try {
-            const res = await axios.put(`${apiBaseUrl}/api/proveedores/${prov._id}`, { estado: !prov.estado });
+            const res = await axios.put(`${API_BASE_URL}/api/proveedores/${prov._id}`, { estado: !prov.estado });
             setProveedores(prev => prev.map(p => p._id === prov._id ? res.data : p));
             if (selectedProv && selectedProv._id === prov._id) setSelectedProv(res.data);
         } catch (error) {
@@ -115,10 +116,10 @@ const Proveedores = () => {
         const payload = { ...formData, usuario_creacion: user?.id || user?._id };
         try {
             if (isEditing) {
-                await axios.put(`${apiBaseUrl}/api/proveedores/${formData._id}`, payload);
+                await axios.put(`${API_BASE_URL}/api/proveedores/${formData._id}`, payload);
                 setStatus({ type: 'success', message: 'Proveedor actualizado' });
             } else {
-                await axios.post(`${apiBaseUrl}/api/proveedores`, payload);
+                await axios.post(`${API_BASE_URL}/api/proveedores`, payload);
                 setStatus({ type: 'success', message: 'Proveedor creado' });
             }
             setIsModalOpen(false);

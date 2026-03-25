@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
@@ -5,7 +6,7 @@ import { Receipt, Plus, Pencil, Trash2, X, Percent, CheckCircle, XCircle } from 
 
 const Impuestos = () => {
     const { user } = useAuth();
-    const apiBaseUrl = (import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`);
+    
 
     const [impuestos, setImpuestos] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,7 +34,7 @@ const Impuestos = () => {
 
     const fetchImpuestos = async () => {
         try {
-            const res = await axios.get(`${apiBaseUrl}/api/impuestos`);
+            const res = await axios.get(`${API_BASE_URL}/api/impuestos`);
             setImpuestos(res.data);
         } catch (error) {
             console.error('Error cargando impuestos:', error);
@@ -68,7 +69,7 @@ const Impuestos = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('¿Desea eliminar este impuesto definitivamente?')) return;
         try {
-            await axios.delete(`${apiBaseUrl}/api/impuestos/${id}`);
+            await axios.delete(`${API_BASE_URL}/api/impuestos/${id}`);
             fetchImpuestos();
             setStatus({ type: 'success', message: 'Impuesto eliminado' });
         } catch (error) {
@@ -78,7 +79,7 @@ const Impuestos = () => {
 
     const handleToggleState = async (impuesto) => {
         try {
-            const res = await axios.put(`${apiBaseUrl}/api/impuestos/${impuesto._id}`, { condicion: !impuesto.condicion });
+            const res = await axios.put(`${API_BASE_URL}/api/impuestos/${impuesto._id}`, { condicion: !impuesto.condicion });
             setImpuestos(prev => prev.map(i => i._id === impuesto._id ? res.data : i));
             setStatus({ type: 'success', message: `Impuesto ${impuesto.condicion ? 'Desactivado' : 'Activado'}` });
         } catch (error) {
@@ -98,10 +99,10 @@ const Impuestos = () => {
 
         try {
             if (isEditing) {
-                await axios.put(`${apiBaseUrl}/api/impuestos/${formData._id}`, payload);
+                await axios.put(`${API_BASE_URL}/api/impuestos/${formData._id}`, payload);
                 setStatus({ type: 'success', message: 'Impuesto actualizado' });
             } else {
-                await axios.post(`${apiBaseUrl}/api/impuestos`, payload);
+                await axios.post(`${API_BASE_URL}/api/impuestos`, payload);
                 setStatus({ type: 'success', message: 'Impuesto creado exitosamente' });
             }
             setIsModalOpen(false);

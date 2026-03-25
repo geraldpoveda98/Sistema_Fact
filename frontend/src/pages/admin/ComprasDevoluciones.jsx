@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Truck, Search, Calendar, PackageX, FileText, Download, Plus, X, AlertCircle, Save, Check, FileSpreadsheet } from 'lucide-react';
@@ -6,7 +7,7 @@ import { exportToExcel, exportToPDF } from '../../utils/exportUtils';
 
 const ComprasDevoluciones = () => {
     const { user } = useAuth();
-    const apiBaseUrl = (import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`);
+    
 
     const [devoluciones, setDevoluciones] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -50,7 +51,7 @@ const ComprasDevoluciones = () => {
             setLoading(true);
             setError(null);
             // El backend filtrará `estado=Devolución` además de las fechas
-            const response = await axios.get(`${apiBaseUrl}/api/compras/consultar`, {
+            const response = await axios.get(`${API_BASE_URL}/api/compras/consultar`, {
                 params: {
                     estado: 'Devolución',
                     mes,
@@ -92,7 +93,7 @@ const ComprasDevoluciones = () => {
         
         try {
             setBBuscandoIngresos(true);
-            const res = await axios.get(`${apiBaseUrl}/api/compras/para-conteo`);
+            const res = await axios.get(`${API_BASE_URL}/api/compras/para-conteo`);
             setIngresosDisponibles(res.data);
         } catch (error) {
             console.error(error);
@@ -175,7 +176,7 @@ const ComprasDevoluciones = () => {
 
         try {
             setIsSaving(true);
-            await axios.post(`${apiBaseUrl}/api/compras/devolucion`, payload);
+            await axios.post(`${API_BASE_URL}/api/compras/devolucion`, payload);
             showToast("Devolución registrada exitosamente, stock actualizado");
             setIsNuevoModalOpen(false);
             fetchDevoluciones(); // recarga la tabla

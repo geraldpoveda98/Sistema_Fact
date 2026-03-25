@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../config';
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { Package, Search, Filter, Loader2, Plus, X, Upload, Check, AlertCircle, FileSpreadsheet, FileText } from 'lucide-react';
@@ -8,7 +9,7 @@ import { formatCurrency } from '../utils/formatUtils';
 
 const Catalogo = () => {
     const { empresa } = useAuth();
-    const apiBaseUrl = (import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`); // Definir a nivel de componente
+     // Definir a nivel de componente
     const [articulos, setArticulos] = useState([]);
     const [empresaData, setEmpresaData] = useState(null); // Nuevo estado para datos de empresa en tiempo real
     const [categorias, setCategorias] = useState([]);
@@ -49,10 +50,10 @@ const Catalogo = () => {
         try {
             setLoading(true);
             const [artRes, catRes, modRes, empRes] = await Promise.all([
-                axios.get(`${apiBaseUrl}/api/articulos`),
-                axios.get(`${apiBaseUrl}/api/categorias`),
-                axios.get(`${apiBaseUrl}/api/modelos`),
-                axios.get(`${apiBaseUrl}/api/empresa`)
+                axios.get(`${API_BASE_URL}/api/articulos`),
+                axios.get(`${API_BASE_URL}/api/categorias`),
+                axios.get(`${API_BASE_URL}/api/modelos`),
+                axios.get(`${API_BASE_URL}/api/empresa`)
             ]);
             setArticulos(artRes.data);
             setCategorias(catRes.data.filter(c => c.condicion));
@@ -114,11 +115,11 @@ const Catalogo = () => {
             }
 
             if (editMode) {
-                await axios.put(`${apiBaseUrl}/api/articulos/${formData._id}`, submitData, {
+                await axios.put(`${API_BASE_URL}/api/articulos/${formData._id}`, submitData, {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 });
             } else {
-                await axios.post(`${apiBaseUrl}/api/articulos`, submitData, {
+                await axios.post(`${API_BASE_URL}/api/articulos`, submitData, {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 });
             }
@@ -136,7 +137,7 @@ const Catalogo = () => {
     const handleDelete = async (id) => {
         if (window.confirm('¿Estás seguro de eliminar este artículo?')) {
             try {
-                await axios.delete(`${apiBaseUrl}/api/articulos/${id}`);
+                await axios.delete(`${API_BASE_URL}/api/articulos/${id}`);
                 cargarDatos();
             } catch (error) {
                 alert(error.response?.data?.error || "Error al eliminar");
@@ -221,7 +222,7 @@ const Catalogo = () => {
                             <div className="h-44 bg-slate-100 dark:bg-slate-900/50 relative overflow-hidden flex items-center justify-center border-b dark:border-slate-700/50 border-slate-100">
                                 {item.imagen ? (
                                     <img 
-                                        src={item.imagen.startsWith('http') ? item.imagen : `${apiBaseUrl}/${item.imagen}`} 
+                                        src={item.imagen.startsWith('http') ? item.imagen : `${API_BASE_URL}/${item.imagen}`} 
                                         alt={item.nombre} 
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                     />
@@ -280,7 +281,7 @@ const Catalogo = () => {
                                                 idmodelo: item.idmodelo?._id || ''
                                             });
                                             setEditMode(true);
-                                            setPreviewImage(item.imagen ? (item.imagen.startsWith('http') ? item.imagen : `${apiBaseUrl}/${item.imagen}`) : null);
+                                            setPreviewImage(item.imagen ? (item.imagen.startsWith('http') ? item.imagen : `${API_BASE_URL}/${item.imagen}`) : null);
                                             setSelectedFile(null);
                                             setShowModal(true);
                                         }}

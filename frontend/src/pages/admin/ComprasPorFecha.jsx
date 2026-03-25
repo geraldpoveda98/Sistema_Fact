@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config';
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
@@ -5,7 +6,7 @@ import { Search, Calendar, Filter, FileText, User, Hash, Box, Wallet, Building2,
 
 const ComprasPorFecha = () => {
     const { token } = useAuth();
-    const apiBaseUrl = (import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`);
+    
 
     // Filtros de búsqueda
     const [filtros, setFiltros] = useState({
@@ -33,7 +34,7 @@ const ComprasPorFecha = () => {
             if (filtros.estado && filtros.estado !== 'Todos') params.append('estado', filtros.estado);
             if (filtros.search) params.append('search', filtros.search);
 
-            const res = await axios.get(`${apiBaseUrl}/api/compras/consultar?${params.toString()}`);
+            const res = await axios.get(`${API_BASE_URL}/api/compras/consultar?${params.toString()}`);
             setCompras(res.data);
         } catch (err) {
             setError(err.response?.data?.error || 'Error al consultar las compras.');

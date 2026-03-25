@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
@@ -11,7 +12,7 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
 const ListaInventario = () => {
-    const apiBaseUrl = (import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`);
+    
     const { user } = useAuth();
 
     const [articulos, setArticulos] = useState([]);
@@ -26,7 +27,7 @@ const ListaInventario = () => {
     const fetchInventario = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`${apiBaseUrl}/api/articulos`);
+            const response = await axios.get(`${API_BASE_URL}/api/articulos`);
             setArticulos(response.data);
         } catch (error) {
             console.error("Error al cargar inventario:", error);
@@ -248,7 +249,7 @@ const ListaInventario = () => {
                                                 <div className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 mx-auto overflow-hidden flex items-center justify-center">
                                                     {art.imagen ? (
                                                         <img 
-                                                            src={art.imagen.startsWith('http') ? art.imagen : `${apiBaseUrl}/${art.imagen}`} 
+                                                            src={art.imagen.startsWith('http') ? art.imagen : `${API_BASE_URL}/${art.imagen}`} 
                                                             alt={art.codigo} 
                                                             className="w-full h-full object-cover" 
                                                         />
