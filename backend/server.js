@@ -11,7 +11,12 @@ app.use(express.json());
 
 // Exponer la carpeta de uploads para consumo público de imágenes (logo, etc)
 const path = require('path');
-app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
+const fs = require('fs');
+const uploadsPath = path.join(__dirname, 'public', 'uploads');
+if (!fs.existsSync(uploadsPath)) {
+  fs.mkdirSync(uploadsPath, { recursive: true });
+}
+app.use('/uploads', express.static(uploadsPath));
 
 // Probar Base de datos
 mongoose.connect(process.env.MONGO_URI, {})

@@ -6,7 +6,7 @@ const path = require('path');
 const fs = require('fs');
 
 // Asegurar que exista el directorio de subidas para usuarios
-const uploadDir = path.join(__dirname, '../uploads/usuarios');
+const uploadDir = path.join(__dirname, '..', 'public', 'uploads', 'usuarios');
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
 }
