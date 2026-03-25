@@ -128,7 +128,7 @@ const DatosEmpresa = () => {
                 </div>
                 <div>
                     <h1 className="text-3xl font-bold dark:text-white text-slate-800 transition-colors">Datos de la Empresa</h1>
-                    <p className="dark:text-slate-400 text-slate-500 transition-colors">Configuración global del sistema RPM.</p>
+                    <p className="dark:text-slate-400 text-slate-500 transition-colors">Configuración global del sistema.</p>
                 </div>
             </div>
 

@@ -13,7 +13,7 @@ import 'jspdf-autotable';
 
 const ListaInventario = () => {
     
-    const { user } = useAuth();
+    const { user, empresa } = useAuth();
 
     const [articulos, setArticulos] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -80,7 +80,7 @@ const ListaInventario = () => {
         const doc = new jsPDF('landscape');
         doc.text("Reporte de Inventario de Almacén", 14, 15);
         doc.setFontSize(10);
-        doc.text(`Fecha generada: ${new Date().toLocaleDateString('es-NI')} - RPM v2.0`, 14, 22);
+        doc.text(`Fecha generada: ${new Date().toLocaleDateString('es-NI')} - ${empresa?.nombre || 'RPM'}`, 14, 22);
 
         const tableColumn = ["Código", "No.Parte", "Nombre", "Marca", "Categoría", "Stock", "Mínimo", "Estado"];
         const tableRows = [];

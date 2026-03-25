@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }) => {
 
                     // Modificar dinámicamente el Favicon y Título de la Plataforma
                     if (res.data.nombre) {
-                        document.title = `${res.data.nombre} - RPM`;
+                        document.title = `${res.data.nombre}`;
                     }
                     if (logoFullUrl) {
                         let link = document.querySelector("link[rel~='icon']");
