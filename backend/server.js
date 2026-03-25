@@ -38,6 +38,36 @@ app.use('/api/devoluciones', require('./routes/devolucionRoutes'));
 app.use('/api/formatos-impresion', require('./routes/formatoImpresionRoutes'));
 app.use('/api/limpiar-datos', require('./routes/limpiarDatosRoutes'));
 
+// Endpoint temporal para alimentar la BD en la nube
+app.get('/api/seed', async (req, res) => {
+    try {
+        const Usuario = require('./models/Usuario');
+        // No borramos todo por seguridad, solo verificamos si ya existe el admin
+        const adminExists = await Usuario.findOne({ login: 'gpoveda' });
+        if (adminExists) {
+            return res.send('El usuario administrador ya existe.');
+        }
+
+        const nuevoUsuario = new Usuario({
+            nombre: 'Gerald Poveda',
+            tipo_documento: 'CEDULA',
+            num_documento: '001-XXXXXX-XXXXX',
+            direccion: 'Masaya',
+            telefono: '87865819',
+            cargo: 'Administrador',
+            login: 'gpoveda',
+            clave: 'admin',
+            condicion: true,
+            permisos: ['Escritorio', 'Almacen', 'Compras', 'Ventas', 'Administración']
+        });
+
+        await nuevoUsuario.save();
+        res.send('✅ Base de datos alimentada con éxito: Creado usuario "gpoveda" con clave "admin".');
+    } catch (error) {
+        res.status(500).send('❌ Error al sembrar: ' + error.message);
+    }
+});
+
 // Ruta Inicial de Verificación
 app.get('/', (req, res) => {
   res.send('API de RPM V2 Funcionando correctamente');
