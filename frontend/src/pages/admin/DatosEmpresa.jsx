@@ -15,8 +15,6 @@ const DatosEmpresa = () => {
     const [status, setStatus] = useState({ type: '', message: '' });
     const [loading, setLoading] = useState(false);
 
-    
-
     // Cargar datos actuales
     useEffect(() => {
         const fetchDatos = async () => {
@@ -43,7 +41,7 @@ const DatosEmpresa = () => {
             }
         };
         fetchDatos();
-    }, [apiBaseUrl]);
+    }, [API_BASE_URL]);
 
     // Auto-ocultar notificación (Toast flotante) después de 4 segundos
     useEffect(() => {
