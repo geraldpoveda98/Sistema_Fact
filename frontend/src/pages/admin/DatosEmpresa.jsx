@@ -33,7 +33,7 @@ const DatosEmpresa = () => {
                         valorDolar: res.data.valorDolar || 36.5
                     });
                     if (res.data.logoUrl) {
-                        setCurrentLogo(`${API_BASE_URL}${res.data.logoUrl}`);
+                        setCurrentLogo(res.data.logoUrl.startsWith('data:') ? res.data.logoUrl : `${API_BASE_URL}${res.data.logoUrl}`);
                     }
                 }
             } catch (error) {
@@ -107,7 +107,7 @@ const DatosEmpresa = () => {
             });
             setStatus({ type: 'success', message: '¡Datos Guardados Exitosamente!' });
             if (res.data.empresa.logoUrl) {
-                setCurrentLogo(`${API_BASE_URL}${res.data.empresa.logoUrl}`);
+                setCurrentLogo(res.data.empresa.logoUrl.startsWith('data:') ? res.data.empresa.logoUrl : `${API_BASE_URL}${res.data.empresa.logoUrl}`);
                 setLogoPreview(null); // Limpiar preview local al guardar
                 setLogoFile(null);
             }

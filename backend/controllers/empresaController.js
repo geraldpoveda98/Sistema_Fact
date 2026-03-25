@@ -29,17 +29,10 @@ exports.updateEmpresa = async (req, res) => {
             empresa = new Empresa();
         }
 
-        // Si se subió un nuevo logo, actualizar ruta y eliminar el anterior
+        // Si se subió un nuevo logo, guardarlo en Base64 directamente en la BD (Permanente)
         if (req.file) {
-            // Eliminar logo anterior del disco si existe
-            if (empresa.logoUrl) {
-                const oldLogoPath = path.join(__dirname, '..', 'public', empresa.logoUrl);
-                if (fs.existsSync(oldLogoPath)) {
-                    fs.unlinkSync(oldLogoPath);
-                }
-            }
-            // Guardar nueva ruta
-            updateData.logoUrl = `/uploads/${req.file.filename}`;
+            const b64 = Buffer.from(req.file.buffer).toString('base64');
+            updateData.logoUrl = `data:${req.file.mimetype};base64,${b64}`;
         }
 
         // Se usa findOneAndUpdate o se ajustan los campos de empresa directamente

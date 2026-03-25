@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
                 
                 const res = await axios.get(`${API_BASE_URL}/api/empresa`);
                 if (res.data) {
-                    const logoFullUrl = res.data.logoUrl ? `${API_BASE_URL}${res.data.logoUrl}` : null;
+                    const logoFullUrl = res.data.logoUrl?.startsWith('data:') ? res.data.logoUrl : (res.data.logoUrl ? `${API_BASE_URL}${res.data.logoUrl}` : null);
                     setEmpresa({
                         ...res.data,
                         logoUrl: logoFullUrl

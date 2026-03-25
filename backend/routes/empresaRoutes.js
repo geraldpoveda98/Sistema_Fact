@@ -4,16 +4,8 @@ const multer = require('multer');
 const path = require('path');
 const empresaController = require('../controllers/empresaController');
 
-// Configuración de Multer para el Logo de Empresa
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, path.join(__dirname, '..', 'public', 'uploads'))
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-        cb(null, 'logo-' + uniqueSuffix + path.extname(file.originalname))
-    }
-});
+// Configuración de Multer para el Logo de Empresa (Memoria para convertir a Base64)
+const storage = multer.memoryStorage();
 
 const upload = multer({
     storage: storage,
