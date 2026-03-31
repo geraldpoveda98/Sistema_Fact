@@ -65,9 +65,8 @@ const Login = () => {
                         </div>
                     )}
                     <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">{empresa?.nombre || 'RPM'}</h2>
-                    <p className="text-slate-500 dark:text-slate-400 font-medium text-sm">Plataforma de Gestión</p>
+                    <p className="dark:text-slate-400 text-slate-500 transition-colors font-medium text-sm mb-4">Acceso Seguro</p>
                     <h1 className="text-3xl font-bold dark:text-white text-slate-800 mb-2 tracking-tight transition-colors">Bienvenido de nuevo</h1>
-                    <p className="dark:text-slate-400 text-slate-500 transition-colors font-medium">{empresa?.nombre || 'RPM'} - Acceso Seguro</p>
                 </div>
 
                 {error && (
