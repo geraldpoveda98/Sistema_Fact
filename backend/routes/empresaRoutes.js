@@ -11,11 +11,11 @@ const upload = multer({
     storage: storage,
     limits: { fileSize: 20 * 1024 * 1024 }, // Límite de 20MB
     fileFilter: (req, file, cb) => {
-        // Solo permitir archivos PNG
-        if (file.mimetype === 'image/png') {
+        // Permitir formatos comunes
+        if (file.mimetype.match(/^image\/(jpeg|png|webp|gif|svg\+xml)$/)) {
             cb(null, true);
         } else {
-            cb(new Error('Solo se permiten imágenes en formato PNG.'));
+            cb(new Error('Formato de imagen no válido.'));
         }
     }
 });

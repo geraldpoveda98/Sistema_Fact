@@ -11,6 +11,10 @@ const { v4: uuidv4 } = require('uuid');
  */
 exports.compressAndUpload = async (fileBuffer, bucket = 'gedsolution', folder = '') => {
     try {
+        if (!supabase) {
+            throw new Error('El cliente de Supabase no está configurado. Revisa las variables de entorno.');
+        }
+
         // 1. Compresión y conversión a WebP usando Sharp
         const compressedBuffer = await sharp(fileBuffer)
             .resize(800, 800, { fit: 'inside', withoutEnlargement: true }) // Redimensionar si es muy grande
