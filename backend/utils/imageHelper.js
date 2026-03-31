@@ -9,7 +9,7 @@ const { v4: uuidv4 } = require('uuid');
  * @param {string} folder Carpeta dentro del bucket (opcional).
  * @returns {Promise<string>} URL pública de la imagen subida.
  */
-exports.compressAndUpload = async (fileBuffer, bucket = 'images', folder = '') => {
+exports.compressAndUpload = async (fileBuffer, bucket = 'gedsolution', folder = '') => {
     try {
         // 1. Compresión y conversión a WebP usando Sharp
         const compressedBuffer = await sharp(fileBuffer)
