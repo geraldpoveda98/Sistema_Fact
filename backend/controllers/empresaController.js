@@ -32,7 +32,7 @@ exports.updateEmpresa = async (req, res) => {
         // Si se subió un nuevo logo, procesarlo, comprimirlo y subirlo a Supabase Storage
         if (req.file) {
             const imageHelper = require('../utils/imageHelper');
-            const publicUrl = await imageHelper.compressAndUpload(req.file.buffer, 'images', 'logos');
+            const publicUrl = await imageHelper.compressAndUpload(req.file.buffer, 'gedsolution', 'logos');
             updateData.logoUrl = publicUrl;
         }
 

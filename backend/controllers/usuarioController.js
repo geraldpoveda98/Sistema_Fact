@@ -75,7 +75,7 @@ exports.create = async (req, res) => {
         let fotoUrl = '';
         if (req.file) {
             const imageHelper = require('../utils/imageHelper');
-            fotoUrl = await imageHelper.compressAndUpload(req.file.buffer, 'images', 'usuarios');
+            fotoUrl = await imageHelper.compressAndUpload(req.file.buffer, 'gedsolution', 'usuarios');
         }
 
         // Validar si el login ya existe
@@ -145,7 +145,7 @@ exports.update = async (req, res) => {
 
         if (req.file) {
             const imageHelper = require('../utils/imageHelper');
-            usuario.fotoUrl = await imageHelper.compressAndUpload(req.file.buffer, 'images', 'usuarios');
+            usuario.fotoUrl = await imageHelper.compressAndUpload(req.file.buffer, 'gedsolution', 'usuarios');
         }
 
         if (req.body.clave && req.body.clave.trim() !== '') {

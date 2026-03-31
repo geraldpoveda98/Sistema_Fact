@@ -9,8 +9,10 @@ const { v4: uuidv4 } = require('uuid');
  * @param {string} folder Carpeta dentro del bucket (opcional).
  * @returns {Promise<string>} URL pública de la imagen subida.
  */
-exports.compressAndUpload = async (fileBuffer, bucket = 'gedsolution', folder = '') => {
+exports.compressAndUpload = async (fileBuffer, bucketNameOptional = 'gedsolution', folder = '') => {
     try {
+        const bucket = 'gedsolution'; // FORZAR SIEMPRE AQUÍ PARA PRODUCCIÓN
+
         if (!supabase) {
             throw new Error('El cliente de Supabase no está configurado. Revisa las variables de entorno.');
         }

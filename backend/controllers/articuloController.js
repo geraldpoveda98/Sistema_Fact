@@ -43,7 +43,7 @@ exports.crear = (req, res) => {
 
             if (req.file) {
                 const imageHelper = require('../utils/imageHelper');
-                data.imagen = await imageHelper.compressAndUpload(req.file.buffer, 'images', 'articulos');
+                data.imagen = await imageHelper.compressAndUpload(req.file.buffer, 'gedsolution', 'articulos');
             }
 
             // Lógica Cálculo de Precio Automático
@@ -93,7 +93,7 @@ exports.actualizar = (req, res) => {
 
             if (req.file) {
                 const imageHelper = require('../utils/imageHelper');
-                data.imagen = await imageHelper.compressAndUpload(req.file.buffer, 'images', 'articulos');
+                data.imagen = await imageHelper.compressAndUpload(req.file.buffer, 'gedsolution', 'articulos');
             }
 
             // Lógica Cálculo de Precio Automático
