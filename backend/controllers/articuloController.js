@@ -4,20 +4,8 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Configuración de multer
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        const dir = path.join(__dirname, '..', 'public', 'uploads', 'articulos');
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
-        }
-        cb(null, dir);
-    },
-    filename: function (req, file, cb) {
-        cb(null, 'articulo_' + Date.now() + path.extname(file.originalname));
-    }
-});
-
+// Configuración de multer a memoria para procesar con Sharp y subir a Supabase
+const storage = multer.memoryStorage();
 const upload = multer({
     storage: storage,
     limits: { fileSize: 20 * 1024 * 1024 }, // 20 MB
@@ -54,8 +42,8 @@ exports.crear = (req, res) => {
             data.stock = 0; // Se fuerza a 0 inicialmente
 
             if (req.file) {
-                const hostUrl = req.protocol + '://' + req.get('host');
-                data.imagen = `${hostUrl}/uploads/articulos/${req.file.filename}`;
+                const imageHelper = require('../utils/imageHelper');
+                data.imagen = await imageHelper.compressAndUpload(req.file.buffer, 'images', 'articulos');
             }
 
             // Lógica Cálculo de Precio Automático
@@ -104,8 +92,8 @@ exports.actualizar = (req, res) => {
             delete data.stock; // Prohibir alterar el stock manuamente desde el form principal
 
             if (req.file) {
-                const hostUrl = req.protocol + '://' + req.get('host');
-                data.imagen = `${hostUrl}/uploads/articulos/${req.file.filename}`;
+                const imageHelper = require('../utils/imageHelper');
+                data.imagen = await imageHelper.compressAndUpload(req.file.buffer, 'images', 'articulos');
             }
 
             // Lógica Cálculo de Precio Automático

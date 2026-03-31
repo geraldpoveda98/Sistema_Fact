@@ -72,7 +72,11 @@ exports.create = async (req, res) => {
             }
         }
 
-        const fotoUrl = req.file ? `/uploads/usuarios/${req.file.filename}` : '';
+        let fotoUrl = '';
+        if (req.file) {
+            const imageHelper = require('../utils/imageHelper');
+            fotoUrl = await imageHelper.compressAndUpload(req.file.buffer, 'images', 'usuarios');
+        }
 
         // Validar si el login ya existe
         const loginExist = await Usuario.findOne({ login });
@@ -140,7 +144,8 @@ exports.update = async (req, res) => {
         usuario.permisos = permisos;
 
         if (req.file) {
-            usuario.fotoUrl = `/uploads/usuarios/${req.file.filename}`;
+            const imageHelper = require('../utils/imageHelper');
+            usuario.fotoUrl = await imageHelper.compressAndUpload(req.file.buffer, 'images', 'usuarios');
         }
 
         if (req.body.clave && req.body.clave.trim() !== '') {

@@ -5,22 +5,8 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Asegurar que exista el directorio de subidas para usuarios
-const uploadDir = path.join(__dirname, '..', 'public', 'uploads', 'usuarios');
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-// Configuración de Multer para la foto de perfil (PNG/JPG, max 20MB)
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, uploadDir);
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, 'user-' + uniqueSuffix + path.extname(file.originalname));
-    }
-});
+// Configuración de Multer para la foto de perfil (Memoria para subir a Supabase)
+const storage = multer.memoryStorage();
 const upload = multer({
     storage: storage,
     limits: { fileSize: 20 * 1024 * 1024 }, // 20 MB max

@@ -29,10 +29,11 @@ exports.updateEmpresa = async (req, res) => {
             empresa = new Empresa();
         }
 
-        // Si se subió un nuevo logo, guardarlo en Base64 directamente en la BD (Permanente)
+        // Si se subió un nuevo logo, procesarlo, comprimirlo y subirlo a Supabase Storage
         if (req.file) {
-            const b64 = Buffer.from(req.file.buffer).toString('base64');
-            updateData.logoUrl = `data:${req.file.mimetype};base64,${b64}`;
+            const imageHelper = require('../utils/imageHelper');
+            const publicUrl = await imageHelper.compressAndUpload(req.file.buffer, 'images', 'logos');
+            updateData.logoUrl = publicUrl;
         }
 
         // Se usa findOneAndUpdate o se ajustan los campos de empresa directamente

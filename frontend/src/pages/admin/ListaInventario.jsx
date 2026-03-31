@@ -249,7 +249,7 @@ const ListaInventario = () => {
                                                 <div className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 mx-auto overflow-hidden flex items-center justify-center">
                                                     {art.imagen ? (
                                                         <img 
-                                                            src={art.imagen.startsWith('http') ? art.imagen : `${API_BASE_URL}/${art.imagen}`} 
+                                                            src={art.imagen?.startsWith('http') ? art.imagen : `${API_BASE_URL}${art.imagen?.startsWith('/') ? '' : '/'}${art.imagen}`} 
                                                             alt={art.codigo} 
                                                             className="w-full h-full object-cover" 
                                                         />
