@@ -1,4 +1,6 @@
 import { API_BASE_URL } from '../../config';
+import { getImageUrl } from '../../utils/urlUtils';
+
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BuildingOfficeIcon, PhotoIcon, ServerIcon } from '@heroicons/react/24/outline';
@@ -33,7 +35,9 @@ const DatosEmpresa = () => {
                         valorDolar: res.data.valorDolar || 36.5
                     });
                     if (res.data.logoUrl) {
-                        setCurrentLogo(res.data.logoUrl.startsWith('data:') ? res.data.logoUrl : `${API_BASE_URL}${res.data.logoUrl}`);
+                        const logoUrl = res.data.logoUrl;
+                        const fullUrl = getImageUrl(logoUrl, API_BASE_URL);
+                        setCurrentLogo(fullUrl);
                     }
                 }
             } catch (error) {
@@ -107,7 +111,8 @@ const DatosEmpresa = () => {
             });
             setStatus({ type: 'success', message: '¡Datos Guardados Exitosamente!' });
             if (res.data.empresa.logoUrl) {
-                setCurrentLogo(res.data.empresa.logoUrl.startsWith('data:') ? res.data.empresa.logoUrl : `${API_BASE_URL}${res.data.empresa.logoUrl}`);
+                const logo = res.data.empresa.logoUrl;
+                setCurrentLogo(getImageUrl(logo, API_BASE_URL));
                 setLogoPreview(null); // Limpiar preview local al guardar
                 setLogoFile(null);
             }

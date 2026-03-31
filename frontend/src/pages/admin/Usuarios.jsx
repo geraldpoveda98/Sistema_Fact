@@ -1,4 +1,6 @@
 import { API_BASE_URL } from '../../config';
+import { getImageUrl } from '../../utils/urlUtils';
+
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { Users, UserPlus, Pencil, Trash2, Camera, Upload, X, ShieldCheck } from 'lucide-react';
@@ -10,8 +12,6 @@ const ALL_PERMISSIONS = [
 ];
 
 const Usuarios = () => {
-    
-
     const [usuarios, setUsuarios] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -128,7 +128,11 @@ const Usuarios = () => {
             ...user,
             clave: '' // Don't show password, leave blank unless wanting to change
         });
-        setFotoPreview(user.fotoUrl?.startsWith('http') ? user.fotoUrl : (user.fotoUrl ? `${API_BASE_URL}${user.fotoUrl}` : null));
+        if (user.fotoUrl) {
+            setFotoPreview(getImageUrl(user.fotoUrl, API_BASE_URL));
+        } else {
+            setFotoPreview(null);
+        }
         setFotoFile(null);
         setIsEditing(true);
         setIsModalOpen(true);
@@ -233,7 +237,11 @@ const Usuarios = () => {
                     <div key={user._id} className="bg-white dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 flex flex-col items-center text-center shadow-sm hover:shadow-md transition-all group">
                         <div className="w-24 h-24 rounded-full bg-slate-100 dark:bg-slate-800 border-4 border-white dark:border-slate-800 shadow-md flex items-center justify-center overflow-hidden mb-4 relative">
                             {user.fotoUrl ? (
-                                <img src={user.fotoUrl?.startsWith('http') ? user.fotoUrl : `${API_BASE_URL}${user.fotoUrl}`} alt={user.nombre} className="w-full h-full object-cover" />
+                                <img 
+                                    src={getImageUrl(user.fotoUrl, API_BASE_URL)} 
+                                    alt={user.nombre} 
+                                    className="w-full h-full object-cover" 
+                                />
                             ) : (
                                 <span className="text-3xl font-bold text-slate-400">{user.nombre.charAt(0).toUpperCase()}</span>
                             )}

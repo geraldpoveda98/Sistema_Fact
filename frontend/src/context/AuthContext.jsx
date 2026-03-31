@@ -1,4 +1,6 @@
 import { API_BASE_URL } from '../config';
+import { getImageUrl } from '../utils/urlUtils';
+
 import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -32,7 +34,7 @@ export const AuthProvider = ({ children }) => {
     const toggleTheme = () => setIsDarkMode(!isDarkMode);
 
     useEffect(() => {
-        // // Manejo de Token
+        // Manejo de Token
         if (token) {
             setUser(JSON.parse(localStorage.getItem('user')) || null);
         }
@@ -40,10 +42,11 @@ export const AuthProvider = ({ children }) => {
         // Cargar datos globales de la empresa para toda la App (Logo, Nombres)
         const fetchEmpresa = async () => {
             try {
-                
                 const res = await axios.get(`${API_BASE_URL}/api/empresa`);
                 if (res.data) {
-                    const logoFullUrl = res.data.logoUrl?.startsWith('data:') ? res.data.logoUrl : (res.data.logoUrl ? `${API_BASE_URL}${res.data.logoUrl}` : null);
+                    const logoUrl = res.data.logoUrl;
+                    const logoFullUrl = getImageUrl(logoUrl, API_BASE_URL);
+                    
                     setEmpresa({
                         ...res.data,
                         logoUrl: logoFullUrl
@@ -74,7 +77,6 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (loginId, clave) => {
         try {
-            // Utilizamos window.location.hostname para detectar la IP dinámica si se accede desde el móvil
             const endpoint = `${API_BASE_URL}/api/usuarios/login`;
             const res = await axios.post(endpoint, { login: loginId, clave });
 

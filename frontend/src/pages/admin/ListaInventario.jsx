@@ -1,4 +1,6 @@
 import { API_BASE_URL } from '../../config';
+import { getImageUrl } from '../../utils/urlUtils';
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
@@ -249,7 +251,7 @@ const ListaInventario = () => {
                                                 <div className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 mx-auto overflow-hidden flex items-center justify-center">
                                                     {art.imagen ? (
                                                         <img 
-                                                            src={art.imagen?.startsWith('http') ? art.imagen : `${API_BASE_URL}${art.imagen?.startsWith('/') ? '' : '/'}${art.imagen}`} 
+                                                            src={getImageUrl(art.imagen, API_BASE_URL)} 
                                                             alt={art.codigo} 
                                                             className="w-full h-full object-cover" 
                                                         />
