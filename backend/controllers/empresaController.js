@@ -75,7 +75,7 @@ exports.updateEmpresa = async (req, res) => {
         res.json({ message: 'Datos de empresa actualizados y precios recalculados con éxito.', empresa });
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Error del servidor actualizando datos de empresa.' });
+        console.error('API Empresa Error:', error);
+        res.status(500).json({ error: error.message || 'Error del servidor actualizando datos de empresa.' });
     }
 };

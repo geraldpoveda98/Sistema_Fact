@@ -42,7 +42,8 @@ exports.compressAndUpload = async (fileBuffer, bucket = 'gedsolution', folder = 
 
         return publicUrlData.publicUrl;
     } catch (error) {
-        console.error('Error en compressAndUpload:', error);
-        throw new Error('Error al procesar o subir la imagen a la nube.');
+        console.error('❌ Error en compressAndUpload:', error);
+        // Rethrow with the specific message for the controller to catch
+        throw new Error(`Error procesando la imagen: ${error.message || 'Fallo desconocido'}`);
     }
 };

@@ -22,6 +22,21 @@ const upload = multer({
 
 // Rutas
 router.get('/', empresaController.getEmpresa);
+
+// Ruta temporal de debug
+router.post('/debug_upload', upload.single('logo'), (req, res) => {
+    res.json({
+        message: 'Debug upload info',
+        fileProvided: !!req.file,
+        fileDetails: req.file ? {
+            fieldname: req.file.fieldname,
+            originalname: req.file.originalname,
+            mimetype: req.file.mimetype,
+            size: req.file.size
+        } : 'No file detected'
+    });
+});
+
 router.post('/', upload.single('logo'), empresaController.updateEmpresa);
 
 module.exports = router;
